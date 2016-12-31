@@ -6,14 +6,17 @@ import java.util.Scanner;
 
 public class InsereEditora {
 
+	private static Scanner entrada;
+
 	public static void main(String[] args) {
 
-		// Obtem input do usuario
-		Scanner entrada = new Scanner(System.in);
-
 		try {
+			// Abre conexao
 			System.out.println("Abrindo conexao...");
 			Connection conexao = FabricaDeConexao.criaConexao();
+
+			// Recebe input do usuario
+			entrada = new Scanner(System.in);
 
 			System.out.println("Digite o nome da editora: ");
 			String nome = entrada.nextLine();
@@ -21,21 +24,24 @@ public class InsereEditora {
 			System.out.println("Digite o email da editora: ");
 			String email = entrada.nextLine();
 
-			// Insere registro no BD (sanitize "?")
+			// Cria string SQL: Insere registro no BD (sanitize "?")
 			String textoDoComando = "INSERT INTO Editora (nome, email)" + "VALUES (?, ?)";
 
-			// Conexao JDBC prepara comando SQL
+			// Prepara comando SQL: Conexao JDBC
 			PreparedStatement comando = conexao.prepareStatement(textoDoComando);
-			// Recebe indice do parametro e o valor (sanitize - "limpa" valores
+
+			// Recebe indice do parametro e o valor: (sanitize - "limpa" valores
 			// enviados (sql injection))
 			comando.setString(1, nome);
 			comando.setString(2, email);
 
+			// Executa comando SQL: Conexao JDBC
 			System.out.println("Executando comando...");
 			comando.execute();
 
+			// Fecha conexao
 			System.out.println("Fechando conexao...");
-			comando.close();
+			conexao.close();
 
 		} catch (Exception e) {
 			e.printStackTrace();

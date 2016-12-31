@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class ListaEditoras {
+public class ListaLivros {
 
 	public static void main(String[] args) {
 
@@ -14,7 +14,7 @@ public class ListaEditoras {
 			Connection conexao = FabricaDeConexao.criaConexao();
 
 			// Cria string SQL: Busca registros no BD
-			String textoDoComando = "SELECT * FROM Editora;";
+			String textoDoComando = "SELECT * FROM Livro;";
 
 			// Prepara comando SQL: Conexao JDBC
 			PreparedStatement comando = conexao.prepareStatement(textoDoComando);
@@ -26,8 +26,8 @@ public class ListaEditoras {
 			// Mostra resultados encontrados
 			System.out.println("Resultados encontrados: \n");
 			while (resultado.next()) {
-				System.out.printf("%d : %s - %s\n", resultado.getInt("id"), resultado.getString("nome"),
-						resultado.getString("email"));
+				System.out.printf("%d : %s - %.2f - %d\n", resultado.getInt("id"), resultado.getString("titulo"),
+						resultado.getDouble("preco"), resultado.getInt("editora_id"));
 			}
 
 			// Fecha conexao

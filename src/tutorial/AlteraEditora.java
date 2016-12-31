@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.Scanner;
 
-public class InsereLivro {
+public class AlteraEditora {
 
 	private static Scanner entrada;
 
@@ -18,30 +18,30 @@ public class InsereLivro {
 			// Recebe input do usuario
 			entrada = new Scanner(System.in);
 
-			System.out.println("Digite o nome do livro: ");
-			String titulo = entrada.nextLine();
+			System.out.println("Digite o id da editora que irá alterar: ");
+			int id = entrada.nextInt(); // gera erro no 1 nextline (pula ele)
 
-			System.out.println("Digite o valor do livro: ");
-			double preco = entrada.nextDouble();
+			System.out.println("Digite o novo nome da editora: ");
+			String nome = entrada.nextLine();
 
-			System.out.println("Digite o id da editora: ");
-			int editora_id = entrada.nextInt();
+			System.out.println("Digite o novo email da editora: ");
+			String email = entrada.nextLine();
 
-			// Cria string SQL: Insere registro no BD (sanitize "?")
-			String textoDoComando = "INSERT INTO Livro (titulo, preco, editora_id)" + "VALUES (?, ?, ?)";
+			// Cria string SQL: altera registro no BD (sanitize "?")
+			String textoDoComando = "UPDATE Editora SET nome = ?, email = ? WHERE id = ?";
 
-			// Prepara comando SQL: Conexao JDBC
+			// Prepara comando SQL: conexao JDBC
 			PreparedStatement comando = conexao.prepareStatement(textoDoComando);
 
 			// Recebe indice do parametro e o valor: (sanitize - "limpa" valores
 			// enviados (sql injection))
-			comando.setString(1, titulo);
-			comando.setDouble(2, preco);
-			comando.setInt(3, editora_id);
+			comando.setString(1, nome);
+			comando.setString(2, email);
+			comando.setInt(3, id);
 
-			// Executa comando SQL: Conexao JDBC
+			// Executa comando SQL
 			System.out.println("Executando comando...");
-			comando.execute();
+			comando.executeUpdate();
 
 			// Fecha conexao
 			System.out.println("Fechando conexao...");
@@ -50,5 +50,6 @@ public class InsereLivro {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 	}
 }
